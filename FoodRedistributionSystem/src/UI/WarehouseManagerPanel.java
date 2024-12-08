@@ -64,17 +64,13 @@ public class WarehouseManagerPanel extends javax.swing.JPanel {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
 
         jLabel1.setText("Storage List ");
-
-        jLabel2.setText("Item Details");
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -84,14 +80,10 @@ public class WarehouseManagerPanel extends javax.swing.JPanel {
                 {null, null, null, null}
             },
             new String [] {
-                "Id", "Title 2", "Title 3", "Title 4"
+                "Id", "Item Name", "Item Qantity", "Expiry"
             }
         ));
         jScrollPane1.setViewportView(jTable1);
-
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane2.setViewportView(jTextArea1);
 
         jButton1.setText("Update Inventory");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -107,25 +99,30 @@ public class WarehouseManagerPanel extends javax.swing.JPanel {
             }
         });
 
+        jButton3.setText("Add to Inventory");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(95, 95, 95)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2))
+                .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 73, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 309, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 309, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(29, 29, 29))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(184, 184, 184)
-                        .addComponent(jButton1))
+                        .addComponent(jButton1)
+                        .addGap(65, 65, 65)
+                        .addComponent(jButton3))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jButton2)))
@@ -140,12 +137,10 @@ public class WarehouseManagerPanel extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1))
-                .addGap(51, 51, 51)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 83, Short.MAX_VALUE)
-                .addComponent(jButton1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 225, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1)
+                    .addComponent(jButton3))
                 .addGap(74, 74, 74))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -160,20 +155,27 @@ public class WarehouseManagerPanel extends javax.swing.JPanel {
         }
 
         int itemId = (int) jTable1.getValueAt(selectedRow, 0);
-        String updatedDetails = jTextArea1.getText().trim();
-
-        if (updatedDetails.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Please enter the updated details.", "Error", JOptionPane.ERROR_MESSAGE);
+        String quantityStr = JOptionPane.showInputDialog(this, "Enter new quantity for the item:");
+        if (quantityStr == null || quantityStr.trim().isEmpty()) {
             return;
         }
 
-        boolean success = warehouseController.updateItemDetails(itemId, updatedDetails);
-        if (success) {
-            JOptionPane.showMessageDialog(this, "Inventory updated successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
-            populateStorageList();
-            jTextArea1.setText("");
-        } else {
-            JOptionPane.showMessageDialog(this, "Failed to update inventory.", "Error", JOptionPane.ERROR_MESSAGE);
+        try {
+            int newQuantity = Integer.parseInt(quantityStr);
+            if (newQuantity < 0) {
+                JOptionPane.showMessageDialog(this, "Quantity cannot be negative.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            boolean success = warehouseController.updateItemQuantity(itemId, newQuantity);
+            if (success) {
+                JOptionPane.showMessageDialog(this, "Inventory updated successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
+                populateStorageList();
+            } else {
+                JOptionPane.showMessageDialog(this, "Failed to update inventory.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Invalid quantity entered.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -182,17 +184,49 @@ public class WarehouseManagerPanel extends javax.swing.JPanel {
         cardLayout.show(mainPanel, "LoginPanel");
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        
+        JTextField itemNameField = new JTextField();
+        JTextField quantityField = new JTextField();
+        JTextField expiryDateField = new JTextField();
+
+        Object[] message = {
+            "Item Name:", itemNameField,
+            "Quantity:", quantityField,
+            "Expiry Date (YYYY-MM-DD):", expiryDateField
+        };
+
+        int option = JOptionPane.showConfirmDialog(this, message, "Add New Item", JOptionPane.OK_CANCEL_OPTION);
+        if (option == JOptionPane.OK_OPTION) {
+            try {
+                String itemName = itemNameField.getText().trim();
+                int quantity = Integer.parseInt(quantityField.getText().trim());
+                String expiryDate = expiryDateField.getText().trim();
+
+                if (itemName.isEmpty() || quantity < 0 || expiryDate.isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "Invalid input. Please try again.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                warehouseController.addItemToInventory(itemName, quantity, expiryDate);
+                JOptionPane.showMessageDialog(this, "Item added successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
+                populateStorageList();
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(this, "Invalid quantity entered.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_jButton3ActionPerformed
+
   
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTextArea jTextArea1;
     // End of variables declaration//GEN-END:variables
 }

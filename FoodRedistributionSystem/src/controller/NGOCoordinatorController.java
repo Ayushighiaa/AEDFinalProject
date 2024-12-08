@@ -47,4 +47,10 @@ public class NGOCoordinatorController {
             .findFirst()
             .ifPresent(distribution -> distribution.setStatus("Assigned"));
     }
+    public void addWorkshop(String title, String date, String coordinator) {
+        int newId = workshops.size() + 1; // Generate a new ID
+        Workshop newWorkshop = new Workshop(newId, title, date, coordinator);
+        workshops.add(newWorkshop); // Add the new workshop to the list
+    }
+    
 }

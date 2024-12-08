@@ -92,7 +92,7 @@ public class VolunteerPanel extends javax.swing.JPanel {
                 {null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Task ID", "Description", "Status", "Assigned To"
             }
         ));
         jScrollPane1.setViewportView(jTable1);
@@ -173,16 +173,29 @@ public class VolunteerPanel extends javax.swing.JPanel {
     }
 
     int taskId = (int) jTable1.getValueAt(selectedRow, 0);
-    String result = taskController.assignTask(taskId, loggedInVolunteerId);
 
-    if (result.equals("Success")) {
-        JOptionPane.showMessageDialog(this, "Task claimed successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
-        jTextArea1.setText(""); // Clear task details
-        populateTaskList(); // Refresh the task list
-    } else {
-        JOptionPane.showMessageDialog(this, result, "Error", JOptionPane.ERROR_MESSAGE);
+    // Show pop-up dialog to ask for volunteer ID
+    String volunteerIdStr = JOptionPane.showInputDialog(this, "Enter Volunteer ID:");
+    if (volunteerIdStr == null || volunteerIdStr.trim().isEmpty()) {
+        return; // If canceled or empty input, exit
     }
-       
+
+    try {
+        int volunteerId = Integer.parseInt(volunteerIdStr);
+
+        // Assign task to the entered volunteer ID
+        String result = taskController.assignTask(taskId, volunteerId);
+
+        if (result.equals("Success")) {
+            JOptionPane.showMessageDialog(this, "Task claimed successfully for Volunteer " + volunteerId + ".", "Success", JOptionPane.INFORMATION_MESSAGE);
+            jTextArea1.setText(""); // Clear task details
+            populateTaskList(); // Refresh the task list
+        } else {
+            JOptionPane.showMessageDialog(this, result, "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this, "Invalid Volunteer ID. Please enter a valid number.", "Error", JOptionPane.ERROR_MESSAGE);
+    }
 
 // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed

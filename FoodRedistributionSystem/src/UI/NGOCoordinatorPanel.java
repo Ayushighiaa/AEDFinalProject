@@ -7,6 +7,7 @@ package UI;
 import controller.NGOCoordinatorController;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.GridLayout;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -103,7 +104,7 @@ public class NGOCoordinatorPanel extends javax.swing.JPanel {
                 {null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "ID", "Food Item", "NGO", "Status"
             }
         ));
         jScrollPane1.setViewportView(jTable1);
@@ -116,7 +117,7 @@ public class NGOCoordinatorPanel extends javax.swing.JPanel {
                 {null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "ID", "Title", "Date", "Coordinator"
             }
         ));
         jScrollPane2.setViewportView(jTable2);
@@ -188,8 +189,86 @@ public class NGOCoordinatorPanel extends javax.swing.JPanel {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        JOptionPane.showMessageDialog(this, "Workshop planning functionality will be implemented here.", "Info", JOptionPane.INFORMATION_MESSAGE);
-        
+      JDialog dialog = new JDialog((JFrame) SwingUtilities.getWindowAncestor(this), "Plan Workshop", true);
+    dialog.setSize(400, 300);
+    dialog.setLayout(new BorderLayout());
+
+    // Create input fields for workshop details
+    JPanel inputPanel = new JPanel();
+    inputPanel.setLayout(new GridLayout(4, 2, 10, 10));
+
+    JLabel titleLabel = new JLabel("Workshop Title:");
+    JTextField titleField = new JTextField();
+
+    JLabel dateLabel = new JLabel("Workshop Date (YYYY-MM-DD):");
+    JTextField dateField = new JTextField();
+
+    JLabel coordinatorLabel = new JLabel("Coordinator:");
+    JTextField coordinatorField = new JTextField();
+
+    inputPanel.add(titleLabel);
+    inputPanel.add(titleField);
+    inputPanel.add(dateLabel);
+    inputPanel.add(dateField);
+    inputPanel.add(coordinatorLabel);
+    inputPanel.add(coordinatorField);
+
+    dialog.add(inputPanel, BorderLayout.CENTER);
+
+    // Create buttons for saving or canceling
+    JPanel buttonPanel = new JPanel();
+    JButton saveButton = new JButton("Save");
+    JButton cancelButton = new JButton("Cancel");
+
+    buttonPanel.add(saveButton);
+    buttonPanel.add(cancelButton);
+    dialog.add(buttonPanel, BorderLayout.SOUTH);
+
+    // Action listener for the save button
+    saveButton.addActionListener(e -> {
+        String title = titleField.getText().trim();
+        String date = dateField.getText().trim();
+        String coordinator = coordinatorField.getText().trim();
+
+        // Validate inputs
+        if (title.isEmpty() || date.isEmpty() || coordinator.isEmpty()) {
+            JOptionPane.showMessageDialog(dialog, "All fields are required.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Validate date format (simple regex for YYYY-MM-DD)
+        if (!date.matches("\\d{4}-\\d{2}-\\d{2}")) {
+            JOptionPane.showMessageDialog(dialog, "Invalid date format. Please use YYYY-MM-DD.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Confirm workshop details
+        int confirm = JOptionPane.showConfirmDialog(dialog,
+                "Please confirm the workshop details:\n\n" +
+                "Title: " + title + "\n" +
+                "Date: " + date + "\n" +
+                "Coordinator: " + coordinator,
+                "Confirm Workshop",
+                JOptionPane.YES_NO_OPTION);
+
+        if (confirm == JOptionPane.YES_OPTION) {
+            // Add the new workshop
+            ngoCoordinatorController.addWorkshop(title, date, coordinator);
+            JOptionPane.showMessageDialog(dialog, "Workshop added successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
+
+            // Update the workshop table
+            populateWorkshopSchedule();
+
+            dialog.dispose(); // Close the dialog
+        }
+    });
+
+    // Action listener for the cancel button
+    cancelButton.addActionListener(e -> dialog.dispose());
+
+    // Show the dialog
+    dialog.setLocationRelativeTo(this);
+    dialog.setVisible(true);
         
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -197,16 +276,29 @@ public class NGOCoordinatorPanel extends javax.swing.JPanel {
         // TODO add your handling code here:
         
         int selectedRow = jTable1.getSelectedRow();
-        if (selectedRow < 0) {
-            JOptionPane.showMessageDialog(this, "Please select a food distribution to assign.", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
+    if (selectedRow < 0) {
+        JOptionPane.showMessageDialog(this, "Please select a food distribution to assign.", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
 
-        int distributionId = (int) jTable1.getValueAt(selectedRow, 0);
+    int distributionId = (int) jTable1.getValueAt(selectedRow, 0);
+    String foodItem = (String) jTable1.getValueAt(selectedRow, 1);
+    String ngoName = (String) jTable1.getValueAt(selectedRow, 2);
+
+    // Show a confirmation dialog with food item and NGO details
+    int confirm = JOptionPane.showConfirmDialog(this,
+            "Are you sure you want to assign the following distribution?\n\n" +
+            "Food Item: " + foodItem + "\n" +
+            "NGO: " + ngoName,
+            "Confirm Assignment",
+            JOptionPane.YES_NO_OPTION);
+
+    if (confirm == JOptionPane.YES_OPTION) {
         ngoCoordinatorController.assignDistribution(distributionId);
-        JOptionPane.showMessageDialog(this, "Food distribution assigned successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(this, "Food distribution assigned successfully to " + ngoName + ".", "Success", JOptionPane.INFORMATION_MESSAGE);
 
         populateFoodDistributionList();
+    }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
