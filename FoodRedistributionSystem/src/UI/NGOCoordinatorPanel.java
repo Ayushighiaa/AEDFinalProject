@@ -24,7 +24,7 @@ public class NGOCoordinatorPanel extends javax.swing.JPanel {
     private JPanel mainPanel;
     private CardLayout cardLayout;
 
-    /**
+    /** 
      * Creates new form NGOCoordinatorPanel
      */
     public NGOCoordinatorPanel(NGOCoordinatorController ngoCoordinatorController,JPanel mainPanel, CardLayout cardLayout) {
