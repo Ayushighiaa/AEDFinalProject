@@ -83,6 +83,8 @@ public class DonationSchedulerPanel extends javax.swing.JPanel {
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
 
+        setBackground(new java.awt.Color(255, 204, 0));
+
         jLabel1.setText("Donation List");
 
         jLabel2.setText("Schedule Details");

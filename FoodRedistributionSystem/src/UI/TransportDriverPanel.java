@@ -72,6 +72,8 @@ public class TransportDriverPanel extends javax.swing.JPanel {
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
 
+        setBackground(new java.awt.Color(255, 204, 0));
+
         jLabel1.setText("Delivery List ");
 
         jLabel2.setText("Delivery Details ");

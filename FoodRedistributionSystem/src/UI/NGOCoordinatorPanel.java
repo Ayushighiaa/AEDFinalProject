@@ -24,7 +24,7 @@ public class NGOCoordinatorPanel extends javax.swing.JPanel {
     private JPanel mainPanel;
     private CardLayout cardLayout;
 
-    /**
+    /** 
      * Creates new form NGOCoordinatorPanel
      */
     public NGOCoordinatorPanel(NGOCoordinatorController ngoCoordinatorController,JPanel mainPanel, CardLayout cardLayout) {
@@ -91,6 +91,8 @@ public class NGOCoordinatorPanel extends javax.swing.JPanel {
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
+
+        setBackground(new java.awt.Color(255, 204, 0));
 
         jLabel1.setText("Food Distribution List ");
 
