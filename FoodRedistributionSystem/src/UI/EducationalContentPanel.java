@@ -65,8 +65,6 @@ public class EducationalContentPanel extends javax.swing.JPanel {
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
 
-        setBackground(new java.awt.Color(204, 204, 204));
-
         jLabel1.setText("Content Title ");
 
         jLabel2.setText("Content Description ");
