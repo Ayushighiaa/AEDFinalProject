@@ -1,17 +1,16 @@
 package controller;
 
-import java.util.HashMap;
-import java.util.Map;
+import service.LogisticsService;
 
 /**
  * Controller for managing logistics operations.
  */
 public class LogisticsController {
 
-    private Map<String, String> routeMap; // Maps schedule date to delivery route
+    private LogisticsService logisticsService;
 
-    public LogisticsController() {
-        this.routeMap = new HashMap<>();
+    public LogisticsController(LogisticsService logisticsService) {
+        this.logisticsService = logisticsService;
     }
 
     /**
@@ -21,7 +20,7 @@ public class LogisticsController {
      * @param scheduleDate The schedule date.
      */
     public void saveRoute(String route, String scheduleDate) {
-        routeMap.put(scheduleDate, route);
+        logisticsService.saveRoute(route, scheduleDate);
     }
 
     /**
@@ -31,6 +30,25 @@ public class LogisticsController {
      * @return The delivery route, or null if no route exists for the given date.
      */
     public String getDeliveryRoute(String scheduleDate) {
-        return routeMap.get(scheduleDate);
+        return logisticsService.getRouteByDate(scheduleDate);
+    }
+
+    /**
+     * Deletes a delivery route for a specific schedule date.
+     *
+     * @param scheduleDate The schedule date.
+     * @return true if the route was removed, false otherwise.
+     */
+    public boolean deleteRoute(String scheduleDate) {
+        return logisticsService.deleteRoute(scheduleDate);
+    }
+
+    /**
+     * Retrieves all delivery routes.
+     *
+     * @return A string representation of all routes.
+     */
+    public String viewAllRoutes() {
+        return logisticsService.viewAllRoutes();
     }
 }

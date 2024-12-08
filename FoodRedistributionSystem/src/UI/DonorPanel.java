@@ -5,14 +5,12 @@
 package UI;
 
 import controller.DonationController;
-import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import model.Donor;
 import model.FoodItem;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import model.Donation;
 
 /**
  *
@@ -134,34 +132,36 @@ public class DonorPanel extends javax.swing.JPanel {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         String foodItemName = jTextField1.getText().trim();
-        String quantityStr = jTextField2.getText().trim();
-        String expiryDate = jTextField3.getText().trim();
+    String quantityStr = jTextField2.getText().trim();
+    String expiryDate = jTextField3.getText().trim();
 
-        // Validate input fields
-        if (foodItemName.isEmpty() || quantityStr.isEmpty() || expiryDate.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "All fields are required.", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
+    if (foodItemName.isEmpty() || quantityStr.isEmpty() || expiryDate.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "All fields are required.", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
 
-        int quantity;
-        try {
-            quantity = Integer.parseInt(quantityStr);
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Quantity must be a number.", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
+    int quantity;
+    try {
+        quantity = Integer.parseInt(quantityStr);
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this, "Quantity must be a number.", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
 
-        // Create a new FoodItem
-        FoodItem foodItem = new FoodItem(0, foodItemName, quantity, expiryDate);
+    // Create a new FoodItem
+    FoodItem foodItem = new FoodItem(0, foodItemName, quantity, expiryDate);
 
-        // Submit the donation using the DonationController
-        donationController.addDonation(loggedInDonor, foodItem);
+    // Generate a unique donation ID
+    int newDonationId = donationController.getAllDonations().size() + 1;
 
-        // Show success message and clear input fields
-        JOptionPane.showMessageDialog(this, "Donation submitted successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
-        jTextField1.setText("");
-        jTextField2.setText("");
-        jTextField3.setText("");
+    // Submit the donation using the DonationController
+    Donation donation = new Donation(newDonationId, foodItem, loggedInDonor, "Pending");
+    donationController.addDonation(donation.getDonor(), donation.getFoodItem());
+
+    JOptionPane.showMessageDialog(this, "Donation submitted successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
+    jTextField1.setText("");
+    jTextField2.setText("");
+    jTextField3.setText("");
         
     }//GEN-LAST:event_jButton1ActionPerformed
 

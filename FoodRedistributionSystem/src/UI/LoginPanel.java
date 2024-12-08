@@ -45,6 +45,9 @@ public class LoginPanel extends javax.swing.JPanel {
     private InspectionController inspectionController;
     private WarehouseController warehouseController;
     private TransportDriverController transportDriverController;
+    LogisticsService logiscticsService = new LogisticsService();
+    
+   
    
 
     private CardLayout cardLayout;
@@ -67,6 +70,9 @@ public class LoginPanel extends javax.swing.JPanel {
         
         UserService userService = new UserService();
         DonationService donationService = new DonationService();
+        
+        
+        
       
         List<Delivery> deliveryList = new ArrayList<>();
 
@@ -111,7 +117,7 @@ public class LoginPanel extends javax.swing.JPanel {
         
         this.userController = new UserController(userService);
         this.donationController = new DonationController(donationService);
-        this.logisticsController = new LogisticsController();
+        this.logisticsController = new LogisticsController(logiscticsService);
         this.transportDriverController = new TransportDriverController(deliveryList);
         this.taskController = new TaskController();
         this.ngoCoordinatorController = new NGOCoordinatorController(foodDistributions,workshops);
@@ -145,7 +151,7 @@ public class LoginPanel extends javax.swing.JPanel {
 
         jLabel3.setText("Role");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Logistics Manager", "Volunteer ", "NGO Coordinator", "Educator", "Food Safety Inspector", "Warehouse Manager", "Transport Driver", "Donor" }));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Logistics Manager", "Volunteer ", "NGO Coordinator", "Educator", "Food Safety Inspector", "Warehouse Manager", "Transport Driver", "Donor", "Donation Scheduler" }));
         jComboBox1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBox1ActionPerformed(evt);
@@ -261,7 +267,7 @@ public class LoginPanel extends javax.swing.JPanel {
         cardLayout.show(mainPanel, "DonorPanel");
     }
     case "Logistics Manager" -> {
-        LogisticsManagerPanel logisticsPanel = new LogisticsManagerPanel(logisticsController, mainPanel, cardLayout);
+        LogisticsManagerPanel logisticsPanel = new LogisticsManagerPanel(logisticsController, logiscticsService, mainPanel, cardLayout);
         mainPanel.add(logisticsPanel, "LogisticsManagerPanel");
         cardLayout.show(mainPanel, "LogisticsManagerPanel");
     }
@@ -295,6 +301,11 @@ public class LoginPanel extends javax.swing.JPanel {
         mainPanel.add(driverPanel, "TransportDriverPanel");
         cardLayout.show(mainPanel, "TransportDriverPanel");
     }
+    case "Donation Scheduler" -> {
+                DonationSchedulerPanel donationSchedulerPanel = new DonationSchedulerPanel(donationController, mainPanel, cardLayout);
+                mainPanel.add(donationSchedulerPanel, "DonationSchedulerPanel");
+                cardLayout.show(mainPanel, "DonationSchedulerPanel");
+            }
     default -> JOptionPane.showMessageDialog(this, "Unknown role selected.", "Error", JOptionPane.ERROR_MESSAGE);
     }
 
