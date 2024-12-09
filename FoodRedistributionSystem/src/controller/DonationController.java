@@ -4,12 +4,14 @@
  */
 package controller;
 
+import java.util.HashMap;
 import model.Donation;
 import model.FoodItem;
 import model.Donor;
 import service.DonationService;
 
 import java.util.List;
+import java.util.Map;
 
 public class DonationController {
     private DonationService donationService;
@@ -37,5 +39,16 @@ public class DonationController {
             donationService.updateDonation(donation);
         }
     }
+    
+    private Map<Donor, String> donorEnterprises = new HashMap<>();
+
+        public void recordEnterprise(Donor donor, String enterprise) {
+            donorEnterprises.put(donor, enterprise);
+        }
+
+        // To retrieve the enterprise for a donor
+        public String getEnterpriseForDonor(Donor donor) {
+            return donorEnterprises.getOrDefault(donor, "Not recorded");
+        }
 }
 
