@@ -57,14 +57,4 @@ public class Delivery {
     public void setDetails(String details) {
         this.details = details;
     }
-
-    @Override
-    public String toString() {
-        return "Delivery{" +
-                "deliveryId=" + deliveryId +
-                ", route='" + route + '\'' +
-                ", status='" + status + '\'' +
-                ", details='" + details + '\'' +
-                '}';
-    }
 }
