@@ -105,6 +105,15 @@ public class LoginPanel extends javax.swing.JPanel {
         FoodItem foodItem3 = new FoodItem(103, "Pasta", 30, "2024-12-15");
 
 
+        // Creating dummy donors
+        Donor donor1 = new Donor(1, "John Doe", "johndoe@example.com", "123-456-7890");
+        Donor donor2 = new Donor(2, "Jane Smith", "janesmith@example.com", "987-654-3210");
+        Donor donor3 = new Donor(3, "Alex Johnson", "alexj@example.com", "555-666-7777");
+
+        // Adding donations to the list
+        donations.add(new Donation(1, foodItem1, donor1, "Pending"));
+        donations.add(new Donation(2, foodItem2, donor2, "Inspected - Approved"));
+        donations.add(new Donation(3, foodItem3, donor3, "Pending"));
         
    
         
