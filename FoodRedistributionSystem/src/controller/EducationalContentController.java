@@ -11,17 +11,7 @@ public class EducationalContentController {
     // Stores content with the title as the key and description as the value
     private Map<String, String> contentMap;
 
-    /**
-     * Constructor initializes with dummy data.
-     */
-    public EducationalContentController() {
-        this.contentMap = new HashMap<>();
-        // Adding dummy data
-        contentMap.put("Food Safety", "Learn the basics of food safety and hygiene.");
-        contentMap.put("Zero Waste Cooking", "Tips and tricks to reduce waste in your kitchen.");
-        contentMap.put("Sustainable Farming", "Explore methods for sustainable agriculture.");
-        contentMap.put("Healthy Eating", "Nutritional advice for a balanced diet.");
-    }
+    
 
     /**
      * Adds new content.
