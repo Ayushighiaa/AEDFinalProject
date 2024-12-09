@@ -98,10 +98,6 @@ public class LoginPanel extends javax.swing.JPanel {
         
         List<Donation> donations = new ArrayList<>();
 
-        // Creating dummy food items
-        FoodItem foodItem1 = new FoodItem(101, "Canned Beans", 20, "2024-12-31");
-        FoodItem foodItem2 = new FoodItem(102, "Rice Packets", 50, "2025-01-15");
-        FoodItem foodItem3 = new FoodItem(103, "Pasta", 30, "2024-12-15");
 
         // Creating dummy donors
         Donor donor1 = new Donor(1, "John Doe", "johndoe@example.com", "123-456-7890");
